@@ -1,52 +1,46 @@
 package com.minbashi.project.controller;
 
-import com.minbashi.project.dto.request.PersonRequest;
-import com.minbashi.project.dto.response.PersonResponse;
-import com.minbashi.project.mapper.PersonMapper;
-import com.minbashi.project.model.Person;
-import com.minbashi.project.service.PersonService;
+import com.minbashi.project.dto.response.FileDetailResponse;
+import com.minbashi.project.mapper.FileDetailMapper;
+import com.minbashi.project.service.FileDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/persons")
+@RequestMapping("/api/file-details")
 public class PersonController {
 
-    private final PersonService personService;
-    private final PersonMapper personMapper;
+    private final FileDetailService fileDetailService;
+    private final FileDetailMapper fileDetailMapper;
 
     @GetMapping
-    public ResponseEntity<List<PersonResponse>> getAll() {
-        List<PersonResponse> persons = personMapper.toResponse(personService.getAll());
+    public ResponseEntity<List<FileDetailResponse>> getAll() {
+        List<FileDetailResponse> persons = fileDetailMapper.toResponse(fileDetailService.getAll());
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(personMapper.toResponse(personService.getById(id)));
+    @GetMapping("/{code}")
+    public ResponseEntity<FileDetailResponse> getByCode(@PathVariable String code) {
+        return ResponseEntity.ok(fileDetailMapper.toResponse(fileDetailService.getByCode(code)));
     }
 
-    @PostMapping
-    public ResponseEntity<Person> create(@RequestBody PersonRequest person) {
-        Person createdPerson = personService.save(personMapper.toEntity(person));
-        return new ResponseEntity<>(createdPerson, HttpStatus.CREATED);
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        fileDetailService.deleteAll();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody PersonRequest personDetails) {
-        Person person = personMapper.toEntity(personDetails);
-        Person updatedPerson = personService.update(id, person);
-        return ResponseEntity.ok(updatedPerson);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        personService.delete(id);
+    @PostMapping(value = "/upload-file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> uploadFile(@RequestPart MultipartFile multiPartFile) {
+        fileDetailService.uploadFile(multiPartFile);
         return ResponseEntity.noContent().build();
     }
 }

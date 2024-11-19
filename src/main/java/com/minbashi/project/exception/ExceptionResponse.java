@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ExceptionResponse(
         String message,
-        String code,
+        String FileDetail,
         HttpStatus httpStatus,
         String path,
         LocalDateTime timestamp) {

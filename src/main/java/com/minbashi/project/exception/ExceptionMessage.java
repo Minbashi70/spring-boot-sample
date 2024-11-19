@@ -5,13 +5,12 @@ import lombok.Getter;
 @Getter
 public enum ExceptionMessage {
     INTERNAL_SERVER_ERROR("100001"),
-    PERSON_ALREADY_EXISTS("100401"),
-    PERSON_NOT_FOUND("10000404");
+    FILE_DETAIL_NOT_FOUND("10000404");
 
-    private final String code;
+    private final String FileDetail;
 
-    ExceptionMessage(String code) {
-        this.code = code;
+    ExceptionMessage(String FileDetail) {
+        this.FileDetail = FileDetail;
     }
 
 }

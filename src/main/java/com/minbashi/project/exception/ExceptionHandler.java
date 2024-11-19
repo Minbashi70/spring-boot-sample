@@ -18,7 +18,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ApplicationBusinessException.class)
     public @ResponseBody ResponseEntity<ExceptionResponse> handleDomainException(ApplicationBusinessException e, HttpServletRequest request) {
         return ResponseEntity.status(e.getStatus()).body(ExceptionResponse.builder()
-                .code(e.getExceptionMessage().getCode())
+                .FileDetail(e.getExceptionMessage().getFileDetail())
                 .httpStatus(e.getStatus())
                 .message(e.getExceptionMessage().name())
                 .path(request.getRequestURI())
@@ -29,7 +29,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public @ResponseBody ResponseEntity<ExceptionResponse> handleException(Exception e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.builder()
-                .code(ExceptionMessage.INTERNAL_SERVER_ERROR.getCode())
+                .FileDetail(ExceptionMessage.INTERNAL_SERVER_ERROR.getFileDetail())
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(e.getMessage())
                 .path(request.getRequestURI())
